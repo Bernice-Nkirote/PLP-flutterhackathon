@@ -6,13 +6,14 @@ class ToDoItem extends StatelessWidget {
   final ToDo todo; // The ToDo object associated with this item
   final Function(ToDo) onToDoChanged; // Callback function for task completion status change
   final Function(String) onDeleteItem; // Callback function for task deletion
-
+  final Function(ToDo) onEditItem; // Callback function for task editing
   // Constructor for ToDoItem, taking required parameters
   const ToDoItem({
     Key? key,
     required this.todo,
     required this.onToDoChanged,
     required this.onDeleteItem,
+    required this.onEditItem,
   }) : super(key: key);
 
   @override
@@ -42,25 +43,40 @@ class ToDoItem extends StatelessWidget {
             decoration: todo.isDone ? TextDecoration.lineThrough : null,  // Apply strikethrough decoration if task is completed
           ),
         ),
-        trailing: Container(
-          padding: EdgeInsets.all(0),
-          margin: EdgeInsets.symmetric(vertical: 12),
-          height: 35,
-          width: 35,
-          decoration: BoxDecoration(
-            color: Colors.red,  // Set background color of the delete button container to red
-            borderRadius: BorderRadius.circular(5),  // Set rounded corners for the delete button container
-          ),
-          child: IconButton(
-            onPressed: () {
-              onDeleteItem(todo.id);  // Invoke callback function when delete button is pressed, passing task ID
-            },
-            icon: Icon(
-              Icons.delete,
-              size: 18,
-              color: Colors.white,  // Set icon color to white
+         trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: () {
+                onEditItem(todo); // Invoke callback function when edit button is pressed, passing the ToDo object
+              },
+              icon: Icon(
+                Icons.edit,
+                size: 18,
+                color: Colors.blue, // Set icon color to blue
+              ),
             ),
-          ),
+            Container(
+              padding: EdgeInsets.all(0),
+              margin: EdgeInsets.symmetric(vertical: 12),
+              height: 35,
+              width: 35,
+              decoration: BoxDecoration(
+                color: Colors.red, // Set background color of the delete button container to red
+                borderRadius: BorderRadius.circular(5), // Set rounded corners for the delete button container
+              ),
+              child: IconButton(
+                onPressed: () {
+                  onDeleteItem(todo.id); // Invoke callback function when delete button is pressed, passing task ID
+                },
+                icon: Icon(
+                  Icons.delete,
+                  size: 18,
+                  color: Colors.white, // Set icon color to white
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
